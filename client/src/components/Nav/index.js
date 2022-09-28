@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Nav(props) {
-  const { tabs = [], setCurrentTab, currentTab } = props;
+const tabs = [
+  { name: 'Profile', description: 'each persons profile' },
+  { name: 'Routine', description: 'a routine that people can customize' },
+  { name: 'Exercise', description: 'people create their own exercise' },
+];
+
+function Nav() {
+  const [currentTab, setCurrentTab] = useState(tabs[0].name);
+  useEffect(() => {
+    document.title = currentTab.name;
+    console.log(currentTab);
+  });
   return (
     <nav>
       <ul>
-        {tabs.map((Tabs) => (
-          <li
-            className={`${currentTab.name === Tabs.name && 'highlight'}`}
-            key={Tabs.name}
-          >
-            <span onClick={() => setCurrentTab(Tabs)}>{Tabs.name}</span>
+        {tabs.map(Tab => (
+          <li className={`${currentTab.name === Tab.name ? 'highlight' : ''}`} key={Tab.name}>
+            <Link to={`/${Tab.name}`}></Link>
+            <span onClick={() => setCurrentTab(Tab)}>{Tab.name}</span>
           </li>
         ))}
       </ul>
