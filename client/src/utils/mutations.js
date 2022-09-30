@@ -46,7 +46,6 @@ export const ADD_EXERCISE = gql`
             _id
             exerciseName
         }
-     }
     }
   }
 `;
