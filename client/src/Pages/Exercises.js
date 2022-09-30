@@ -14,9 +14,9 @@ import { EditModal } from '../components/exerciseModals';
 import { AddExerciseModal } from '../components/exerciseModals';
 
 const exercises = [
-  { name: 'Example 1', focus: 'Arms', id: '1' },
-  { name: 'Example 2', focus: 'Core', id: '2' },
-  { name: 'Example 3', focus: 'Legs', id: '3' },
+  { name: 'Example 1', focus: 'Arms', id: '1', sets: 2 },
+  { name: 'Example 2', focus: 'Core', id: '2', sets: 3 },
+  { name: 'Example 3', focus: 'Legs', id: '3', sets: 4 },
 ];
 
 function handleDelete(event) {
