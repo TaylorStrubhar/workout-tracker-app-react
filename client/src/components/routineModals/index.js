@@ -38,16 +38,7 @@ const formStyle = {
   alignItems: 'center',
 };
 
-const bodyCategories = [
-  'Arms',
-  'Back',
-  'Cardio',
-  'Chest',
-  'Core',
-  'Full Body',
-  'Legs',
-  'Shoulders',
-];
+const Exercises = ['Arms', 'Back', 'Cardio', 'Chest', 'Core', 'Full Body', 'Legs', 'Shoulders'];
 
 function EditModal({ exercise }) {
   const [open, setOpen] = useState(false);
@@ -98,9 +89,9 @@ function EditModal({ exercise }) {
                 value={category}
                 onChange={handleChangeCategory}
               >
-                {bodyCategories.map(category => (
-                  <MenuItem key={category} value={category}>
-                    {category}
+                {Exercises.map(exercise => (
+                  <MenuItem key={exercise} value={exercise}>
+                    {exercise}
                   </MenuItem>
                 ))}
               </Select>
@@ -113,7 +104,7 @@ function EditModal({ exercise }) {
 }
 
 // Add Exercise Modal
-function AddExerciseModal() {
+function AddRoutineModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -160,7 +151,7 @@ function AddExerciseModal() {
                 value={category}
                 onChange={handleChangeCategory}
               >
-                {bodyCategories.map(category => (
+                {Exercises.map(category => (
                   <MenuItem key={category} value={category}>
                     {category}
                   </MenuItem>
@@ -174,4 +165,4 @@ function AddExerciseModal() {
   );
 }
 
-export { EditModal, AddExerciseModal };
+export { EditModal, AddRoutineModal };
