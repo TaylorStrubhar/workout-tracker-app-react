@@ -35,7 +35,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { setContext } from '@apollo/client/link/context';
 
-import Nav from './components/Nav';
+// import Nav from './components/Nav';
 import Profile from './Pages/Profile';
 import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
@@ -140,6 +140,15 @@ function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  // const linkProfile = () => {
+  //   return <Route path='/profile' element={<Profile />} />;
+  // };
+  // const linkRoutine = () => {
+  //   return <Route path='/routines' element={<Routines />} />;
+  // };
+  // const linkExercise = () => {
+  //   return <Route path='/exercises' element={<Exercises />} />;
+  // };
   //end
   return (
     <Box sx={{ display: 'flex' }}>
@@ -177,21 +186,19 @@ function App() {
         <List>
           {['Profile'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => (window.location = `/${text}`)}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? (
-                    <AccountCircleIcon />
-                  ) : (
-                    <AccountCircleIcon />
-                  )}
+                  <AccountCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText
+                  primary={text}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-
         <List>
           {['Routine', 'Exercise'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -201,6 +208,7 @@ function App() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => (window.location = `/${text}`)}
               >
                 <ListItemIcon
                   sx={{
@@ -215,7 +223,11 @@ function App() {
                     <FitnessCenterIcon />
                   )}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -230,6 +242,7 @@ function App() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => (window.location = `/${text}`)}
               >
                 <ListItemIcon
                   sx={{
@@ -240,7 +253,11 @@ function App() {
                 >
                   {index % 2 === 0 ? <LoginIcon /> : <LogoutIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -255,6 +272,7 @@ function App() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => (window.location = `/${text}`)}
               >
                 <ListItemIcon
                   sx={{
@@ -265,7 +283,11 @@ function App() {
                 >
                   {index % 2 === 0 ? <JoinInnerIcon /> : <JoinInnerIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -273,19 +295,16 @@ function App() {
       </Drawer>
       <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        <ApolloProvider client={client}>
+          <Router>
+            <Routes>
+              <Route path='/profile' element={<Profile />} />
+              <Route path='/exercises' element={<Exercises />} />
+              <Route path='/routines' element={<Routines />} />
+            </Routes>
+          </Router>
+        </ApolloProvider>
       </Box>
-      <ApolloProvider client={client}>
-        <Router>
-          <header>
-            <Nav />
-          </header>
-          <Routes>
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/exercises' element={<Exercises />} />
-            <Route path='/routines' element={<Routines />} />
-          </Routes>
-        </Router>
-      </ApolloProvider>
     </Box>
   );
 }
