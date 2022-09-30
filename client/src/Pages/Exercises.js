@@ -10,20 +10,34 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import EditModal from '../components/addExerciseModal';
+import { EditModal } from '../components/exerciseModals';
+import { AddExerciseModal } from '../components/exerciseModals';
 
 const exercises = [
-  { name: 'Example 1', focus: 'Arms' },
-  { name: 'Example 2', focus: 'Core' },
-  { name: 'Example 3', focus: 'Legs' },
+  { name: 'Example 1', focus: 'Arms', id: '1' },
+  { name: 'Example 2', focus: 'Core', id: '2' },
+  { name: 'Example 3', focus: 'Legs', id: '3' },
 ];
 
+function handleDelete(event) {
+  console.log(event.target.dataset);
+}
+
+// Generate list items from map of exercises array
 function generateExercises() {
   return exercises.map(exercise => (
-    <ListItem key={exercise.name}>
+    // List Item
+    <ListItem key={exercise.name} id={exercise.id}>
       <ListItemText primary={`${exercise.name}`} secondary={`${exercise.focus}`} />
+      {/* Attach modal to list item passing in exercise */}
       <EditModal exercise={exercise} />
-      <IconButton edge="end" aria-label="delete">
+      {/* Delete */}
+      <IconButton
+        edge="end"
+        aria-label="delete"
+        data-exerciseid={exercise.id}
+        onClick={handleDelete}
+      >
         <DeleteIcon />
       </IconButton>
     </ListItem>
@@ -33,9 +47,9 @@ function generateExercises() {
 function Exercises() {
   return (
     <section>
-      <Stack spacing={2} direction={'row'}>
+      <Stack spacing={2} direction={'row'} alignItems={'center'}>
         <h1>My Exercises</h1>
-        <Button varient="outlined">+ Exercise</Button>
+        <AddExerciseModal />
       </Stack>
       <TextField fullWidth id="fullWidth" placeholder="Search" />
       <Button fullWidth varient="outlined">
