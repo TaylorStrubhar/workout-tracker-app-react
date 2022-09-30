@@ -40,6 +40,7 @@ import Profile from './Pages/Profile';
 import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
 import Login from './Pages/Login';
+import Signup from './Pages/Signup';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
