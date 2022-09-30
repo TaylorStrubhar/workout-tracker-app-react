@@ -11,7 +11,7 @@ const typeDefs = gql`
 
   type Routine {
     _id: ID
-    name: String
+    routineName: String
     createdAt: String
     username: String
     exercises: [Exercise]
@@ -19,7 +19,7 @@ const typeDefs = gql`
 
   type Exercise {
     _id: ID
-    name: String
+    exerciseName: String
     weight: Int
     reps: Int
     category: String
