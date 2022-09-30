@@ -113,6 +113,7 @@ function EditModal({ exercise }) {
   );
 }
 
+// Add Exercise Modal
 function AddExerciseModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
