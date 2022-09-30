@@ -19,7 +19,12 @@ const routineSchema = new Schema(
         type: String,
         required: true
       },
-      exercise: [exerciseSchema]
+      exercise: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Exercise"
+        }
+      ]
     },
     {
       toJSON: {

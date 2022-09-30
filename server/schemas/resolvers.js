@@ -1,5 +1,5 @@
 const {AuthenticationError} = require('apollo-server-express');
-const {User, Routine} = require('../models');
+const {User, Routine, Exercise} = require('../models');
 const {signToken} = require('../utils/auth');
 
 const resolvers = {
@@ -68,6 +68,21 @@ const resolvers = {
         );
 
         return routine;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    addExercise: async (parent, args, context) => {
+      if (context.user) {
+        const exercise = await Exercise.create({...args});
+
+        await User.findByIdAndUpdate(
+          {_id: context.user._id},
+          {$push: {exercises: exercise._id}},
+          {new: true}
+        );
+
+        return exercise;
       }
 
       throw new AuthenticationError('You need to be logged in!');
