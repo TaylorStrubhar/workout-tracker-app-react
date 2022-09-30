@@ -35,7 +35,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { setContext } from '@apollo/client/link/context';
 
-import Nav from './components/Nav';
+// import Nav from './components/Nav';
 import Profile from './Pages/Profile';
 import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
@@ -191,7 +191,6 @@ function App() {
           ))}
         </List>
         <Divider />
-
         <List>
           {['Routine', 'Exercise'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -273,19 +272,16 @@ function App() {
       </Drawer>
       <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        <ApolloProvider client={client}>
+          <Router>
+            <Routes>
+              <Route path='/profile' element={<Profile />} />
+              <Route path='/exercises' element={<Exercises />} />
+              <Route path='/routines' element={<Routines />} />
+            </Routes>
+          </Router>
+        </ApolloProvider>
       </Box>
-      <ApolloProvider client={client}>
-        <Router>
-          <header>
-            <Nav />
-          </header>
-          <Routes>
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/exercises' element={<Exercises />} />
-            <Route path='/routines' element={<Routines />} />
-          </Routes>
-        </Router>
-      </ApolloProvider>
     </Box>
   );
 }
