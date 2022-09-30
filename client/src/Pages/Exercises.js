@@ -10,7 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import EditModal from '../components/addExerciseModal';
+import { EditModal } from '../components/exerciseModals';
+import { AddExerciseModal } from '../components/exerciseModals';
 
 const exercises = [
   { name: 'Example 1', focus: 'Arms' },
@@ -35,7 +36,7 @@ function Exercises() {
     <section>
       <Stack spacing={2} direction={'row'}>
         <h1>My Exercises</h1>
-        <Button varient="outlined">+ Exercise</Button>
+        <AddExerciseModal />
       </Stack>
       <TextField fullWidth id="fullWidth" placeholder="Search" />
       <Button fullWidth varient="outlined">
