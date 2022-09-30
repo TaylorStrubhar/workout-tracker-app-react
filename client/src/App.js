@@ -1,7 +1,12 @@
 import './App.css';
 import React from 'react';
 
-import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from '@apollo/client';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -39,9 +44,9 @@ function App() {
           <Nav />
         </header>
         <Routes>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/exercises" element={<Exercises />} />
-          <Route path="/routines" element={<Routines />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/exercises' element={<Exercises />} />
+          <Route path='/routines' element={<Routines />} />
         </Routes>
       </Router>
     </ApolloProvider>
