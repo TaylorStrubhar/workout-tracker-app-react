@@ -200,7 +200,7 @@ function App() {
         </List>
         <Divider />
         <List>
-          {['Routine', 'Exercise'].map((text, index) => (
+          {['Routines', 'Exercises'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
