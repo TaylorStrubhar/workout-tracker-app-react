@@ -1,5 +1,5 @@
 const {AuthenticationError} = require('apollo-server-express');
-const {User, Routine} = require('../models');
+const {User, Routine, Exercise} = require('../models');
 const {signToken} = require('../utils/auth');
 
 const resolvers = {
@@ -8,7 +8,8 @@ const resolvers = {
       if (context.user) {
         const userData = await User.findOne({_id: context.user._id})
           .select('-__v -password')
-          .populate('routines');
+          .populate('routines')
+          .populate('exercises');
 
         return userData;
       }
@@ -18,12 +19,14 @@ const resolvers = {
     users: async () => {
       return User.find()
         .select('-__v -password')
-        .populate('routines');
+        .populate('routines')
+        .populate('exercises');
     },
     user: async (parent, {username}) => {
       return User.findOne({username})
         .select('-__v -password')
-        .populate('routines');
+        .populate('routines')
+        .populate('exercises');
     },
     routines: async (parent, {username}) => {
       const params = username ? {username} : {};
@@ -57,17 +60,38 @@ const resolvers = {
 
       return {token, user};
     },
-    addRoutine: async (parent, args, context) => {
+    addRoutine: async (parent, { routineName, exercises }, context) => {
+      console.log(routineName, exercises);
+      console.log(context.user._id);
       if (context.user) {
-        const routine = await Routine.create({...args, username: context.user.username});
-
-        await User.findByIdAndUpdate(
+        const newRoutine = await Routine.create(
+          {userId: `${context.user._id}`},
+          {routineName: routineName},
+          {exercises: { exercises }}
+        );
+        const savedRoutine = await User.findByIdAndUpdate(
           {_id: context.user._id},
-          {$push: {routines: routine._id}},
+          {$push: {routines: newRoutine._id}},
           {new: true}
         );
 
-        return routine;
+        return savedRoutine;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    addExercise: async (parent, args, context) => {
+      console.log({...args});
+      if (context.user) {
+        const exercise = await Exercise.create({...args});
+
+        await User.findByIdAndUpdate(
+          {_id: context.user._id},
+          {$push: {exercises: exercise}},
+          {new: true}
+        );
+
+        return exercise;
       }
 
       throw new AuthenticationError('You need to be logged in!');

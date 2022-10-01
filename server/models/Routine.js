@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const exerciseSchema = require('./Exercise');
 const dateFormat = require('../utils/dateFormat');
 
 const routineSchema = new Schema(
@@ -15,11 +14,16 @@ const routineSchema = new Schema(
         default: Date.now,
         get: timestamp => dateFormat(timestamp)
       },
-      username: {
+      userId: {
         type: String,
         required: true
       },
-      exercise: [exerciseSchema]
+      exercises: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Exercise"
+        }
+      ]
     },
     {
       toJSON: {

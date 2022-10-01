@@ -25,6 +25,12 @@ const userSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'Routine'
       }
+    ],
+    exercises: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Exercise'
+      }
     ]
   },
   {

@@ -28,45 +28,44 @@ export const QUERY_ROUTINE = gql`
   }
 `;
 
-export const QUERY_USER = gql`
-  query user($username: String!) {
-    user(username: $username) {
-      _id
-      username
-      email
-      routines {
-        _id
-        routineName
-        createdAt
-      }
-    }
-  }
-`;
+// export const QUERY_USER = gql`
+//   query user($username: String!) {
+//     user(username: $username) {
+//       _id
+//       username
+//       email
+//       routines {
+//         _id
+//         routineName
+//         createdAt
+//       }
+//     }
+//   }
+// `;
 
 export const QUERY_ME = gql`
-  {
+  query QueryMe {
     me {
       _id
       username
       email
-      routines {
+      routineCount
+      exercises {
         _id
-        routineName
-        createdAt
-        exercises {
-          _id
-        }
+        exerciseName
+        exerciseCategory
       }
     }
   }
 `;
 
 export const QUERY_ME_BASIC = gql`
-  {
+  query QueryMe {
     me {
       _id
       username
       email
+      
     }
   }
 `;

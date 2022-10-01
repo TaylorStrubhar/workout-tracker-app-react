@@ -30,10 +30,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { setContext } from '@apollo/client/link/context';
 
-import Nav from './components/Nav';
+// import Nav from './components/Nav';
 import Profile from './Pages/Profile';
 import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
+import Login from './Pages/Login';
+import Signup from './Pages/Signup';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -135,6 +137,15 @@ function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  // const linkProfile = () => {
+  //   return <Route path='/profile' element={<Profile />} />;
+  // };
+  // const linkRoutine = () => {
+  //   return <Route path='/routines' element={<Routines />} />;
+  // };
+  // const linkExercise = () => {
+  //   return <Route path='/exercises' element={<Exercises />} />;
+  // };
   //end
   return (
     <Box sx={{ display: 'flex' }}>
@@ -168,17 +179,16 @@ function App() {
         <List>
           {['Profile'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => (window.location = `/${text}`)}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <AccountCircleIcon /> : <AccountCircleIcon />}
+                  <AccountCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={text} onClick={() => (window.location = `/${text}`)} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-
         <List>
           {['Routines', 'Exercises'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -218,6 +228,7 @@ function App() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => (window.location = `/${text}`)}
               >
                 <ListItemIcon
                   sx={{
@@ -228,7 +239,11 @@ function App() {
                 >
                   {index % 2 === 0 ? <LoginIcon /> : <LogoutIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -243,6 +258,7 @@ function App() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => (window.location = `/${text}`)}
               >
                 <ListItemIcon
                   sx={{
@@ -253,7 +269,11 @@ function App() {
                 >
                   {index % 2 === 0 ? <JoinInnerIcon /> : <JoinInnerIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                  onClick={() => (window.location = `/${text}`)}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -264,6 +284,8 @@ function App() {
         <ApolloProvider client={client}>
           <Router>
             <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/exercises" element={<Exercises />} />
               <Route path="/routines" element={<Routines />} />
