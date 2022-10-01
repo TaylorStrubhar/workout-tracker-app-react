@@ -15,7 +15,7 @@ const typeDefs = gql`
     routineName: String
     createdAt: String
     userId: String
-    exercises: [Exercise]
+    exercises: [String]
   }
 
   type Exercise {
@@ -46,7 +46,7 @@ const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addRoutine(routineName: String!, routineData: [saveExerciseInput]!): User
+    addRoutine(routineName: String!, exercises: [String]!): User
     addExercise(exerciseName: String!, exerciseCategory: String!): Exercise
   }
 `;

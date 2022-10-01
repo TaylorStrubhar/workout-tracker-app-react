@@ -60,11 +60,14 @@ const resolvers = {
 
       return {token, user};
     },
-    addRoutine: async (parent, args, { routineData }, context) => {
+    addRoutine: async (parent, { routineName, exercises }, context) => {
+      console.log(routineName, exercises);
+      console.log(context.user._id);
       if (context.user) {
         const newRoutine = await Routine.create(
-          {routineName: `${args.routineName}`},
-          {exercises: { ...routineData }}
+          {userId: `${context.user._id}`},
+          {routineName: `${routineName}`},
+          {exercises: { exercises }}
         );
         const savedRoutine = await User.findByIdAndUpdate(
           {_id: context.user._id},
