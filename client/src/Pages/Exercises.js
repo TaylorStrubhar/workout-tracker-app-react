@@ -10,34 +10,25 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { EditModal } from '../components/exerciseModals';
-import { AddExerciseModal } from '../components/exerciseModals';
+import { EditExerciseModal, AddExerciseModal } from '../components/exerciseModals';
 
-const exercises = [
-  { name: 'Example 1', focus: 'Arms', id: '1' },
-  { name: 'Example 2', focus: 'Core', id: '2' },
-  { name: 'Example 3', focus: 'Legs', id: '3' },
-];
+import { useQuery } from '@apollo/client';
 
-function handleDelete(event) {
-  console.log(event.target.dataset);
-}
+import { QUERY_ME } from '../utils/queries';
 
-// Generate list items from map of exercises array
-function generateExercises() {
+function generateExercises(exercises) {
+  if (!exercises) {
+    return console.log('You have no saved exercises!');
+  }
+
   return exercises.map(exercise => (
-    // List Item
-    <ListItem key={exercise.name} id={exercise.id}>
-      <ListItemText primary={`${exercise.name}`} secondary={`${exercise.focus}`} />
-      {/* Attach modal to list item passing in exercise */}
-      <EditModal exercise={exercise} />
-      {/* Delete */}
-      <IconButton
-        edge="end"
-        aria-label="delete"
-        data-exerciseid={exercise.id}
-        onClick={handleDelete}
-      >
+    <ListItem key={exercise._id}>
+      <ListItemText
+        primary={`${exercise.exerciseName}`}
+        secondary={`${exercise.exerciseCategory}`}
+      />
+      <EditExerciseModal exercise={exercise} />
+      <IconButton edge="end" aria-label="delete">
         <DeleteIcon />
       </IconButton>
     </ListItem>
@@ -45,9 +36,23 @@ function generateExercises() {
 }
 
 function Exercises() {
+  const { loading, data } = useQuery(QUERY_ME);
+
+  // const [removeExercise] = useMutation(DELETE_EXERCISE);
+
+  const userData = data?.me || {};
+
+  if (loading) {
+    return <h2>LOADING...</h2>;
+  }
+
+  let exercises = userData.exercises;
+
+  console.log(exercises);
+
   return (
     <section>
-      <Stack spacing={2} direction={'row'} alignItems={'center'}>
+      <Stack spacing={2} direction={'row'} sx={{ alignItems: 'center' }}>
         <h1>My Exercises</h1>
         <AddExerciseModal />
       </Stack>
@@ -56,7 +61,7 @@ function Exercises() {
         Filter by Category
       </Button>
 
-      <List>{generateExercises()}</List>
+      <List>{generateExercises(exercises)}</List>
     </section>
   );
 }
