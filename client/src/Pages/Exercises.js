@@ -48,8 +48,6 @@ function Exercises() {
 
   let exercises = userData.exercises;
 
-  console.log(exercises);
-
   return (
     <section>
       <Stack spacing={2} direction={'row'} sx={{ alignItems: 'center' }}>

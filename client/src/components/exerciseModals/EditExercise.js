@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import { useMutation } from '@apollo/client';
 
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +10,6 @@ import Button from '@mui/material/Button';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 
 import { Stack } from '@mui/system';
-import { ADD_EXERCISE, QUERY_ME } from '../../utils/mutations';
 
 const style = {
   position: 'absolute',
@@ -52,7 +50,6 @@ const bodyCategories = [
 ];
 
 function EditExerciseModal({ exercise }) {
-  console.log(exercise);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

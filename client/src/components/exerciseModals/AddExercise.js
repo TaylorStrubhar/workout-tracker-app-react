@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 
 import { Stack } from '@mui/system';
-import { ADD_EXERCISE, QUERY_ME } from '../../utils/mutations';
+import { ADD_EXERCISE } from '../../utils/mutations';
 
 const style = {
   position: 'absolute',
@@ -91,7 +91,7 @@ function AddExerciseModal() {
       });
 
       handleClose();
-      return console.log(data);
+      return console.log(`Added ${data.exerciseName}`);
     } catch (e) {
       console.error(e);
     }
