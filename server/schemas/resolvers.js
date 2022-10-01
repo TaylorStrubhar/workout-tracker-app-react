@@ -66,7 +66,7 @@ const resolvers = {
       if (context.user) {
         const newRoutine = await Routine.create(
           {userId: `${context.user._id}`},
-          {routineName: `${routineName}`},
+          {routineName: routineName},
           {exercises: { exercises }}
         );
         const savedRoutine = await User.findByIdAndUpdate(
