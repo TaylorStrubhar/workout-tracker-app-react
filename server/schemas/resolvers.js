@@ -1,3 +1,4 @@
+const { ContextualizedQueryLatencyStats } = require('apollo-reporting-protobuf');
 const {AuthenticationError} = require('apollo-server-express');
 const {User, Routine, Exercise} = require('../models');
 const {signToken} = require('../utils/auth');
@@ -28,12 +29,18 @@ const resolvers = {
         .populate('routines')
         .populate('exercises');
     },
-    routines: async (parent, {username}) => {
-      const params = username ? {username} : {};
-      return Routine.find(params).sort({createdAt: -1});
+    // needs more work
+    routines: async (parent, args, context) => {
+      const params = context.user._id;
+      return Routine.find({params}).sort({createdAt: -1})
+      .populate('exercises');
     },
     routine: async (parent, {_id}) => {
-      return Routine.findOne({_id});
+      return Routine.findOne({_id})
+      .populate('exercises');
+    },
+    exercise: async (parent, {_id}) => {
+      return Exercise.findOne({_id});
     }
 },
 
@@ -83,19 +90,26 @@ const resolvers = {
     //   throw new AuthenticationError('You need to be logged in!');
     // },
     addRoutine: async (parent, args, context) => {
-      console.log(args);
-      console.log(context.user._id);
+      const exerciseArr = args.exercises;
+      console.log(exerciseArr);
+      const query = { _id: exerciseArr };
+      // const options = { };
+      const findAll = await Exercise.find(query);
+      // const testId = args.exercises[0];
+      // const testCall = await Exercise.findById(testId)
+      //.select('-__v');
+      console.log(findAll);
       if (context.user) {
         
-        const newRoutine = await Routine.create({userId: `${context.user._id}`,...args});
+        const routine = await Routine.create({routineName: args.routineName, userId: context.user._id, exercises: findAll});
 
         await User.findByIdAndUpdate(
           {_id: context.user._id},
-          {$push: {routines: newRoutine}},
+          {$push: {routines: routine}},
           {new: true}
         );
 
-        return newRoutine;
+        return routine;
       }
 
       throw new AuthenticationError('You need to be logged in!');
