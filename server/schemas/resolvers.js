@@ -60,22 +60,42 @@ const resolvers = {
 
       return {token, user};
     },
-    addRoutine: async (parent, { routineName, exercises }, context) => {
-      console.log(routineName, exercises);
+    // addRoutine: async (parent, { routineName, exercises }, context) => {
+    //   console.log(routineName, exercises);
+    //   console.log(context.user._id);
+    //   if (context.user) {
+        
+    //     const newRoutine = await Routine.create(
+    //       {userId: `${context.user._id}`,
+    //       routineName: routineName,
+    //       exercises: exercises}
+    //     );
+    //     console.log(newRoutine);
+    //     const savedRoutine = await User.findByIdAndUpdate(
+    //       {_id: context.user._id},
+    //       {$push: {routines: newRoutine._id}},
+    //       {new: true}
+    //     );
+
+    //     return savedRoutine;
+    //   }
+
+    //   throw new AuthenticationError('You need to be logged in!');
+    // },
+    addRoutine: async (parent, args, context) => {
+      console.log(args);
       console.log(context.user._id);
       if (context.user) {
-        const newRoutine = await Routine.create(
-          {userId: `${context.user._id}`},
-          {routineName: routineName},
-          {exercises: { exercises }}
-        );
-        const savedRoutine = await User.findByIdAndUpdate(
+        
+        const newRoutine = await Routine.create({userId: `${context.user._id}`,...args});
+
+        await User.findByIdAndUpdate(
           {_id: context.user._id},
-          {$push: {routines: newRoutine._id}},
+          {$push: {routines: newRoutine}},
           {new: true}
         );
 
-        return savedRoutine;
+        return newRoutine;
       }
 
       throw new AuthenticationError('You need to be logged in!');
@@ -95,7 +115,18 @@ const resolvers = {
       }
 
       throw new AuthenticationError('You need to be logged in!');
-    }
+    },
+    deleteExercise: async (parent, args, context) => {
+      if (context.user) {
+        const exercise = await Exercise.deleteOne({...args});
+
+        await Exercise.findByIdAndDelete(args.id);
+
+        return exercise;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
   }
 };
 

@@ -30,7 +30,7 @@ export const ADD_ROUTINE = gql`
       routineName
       createdAt
       username
-      exercise {
+      exercises {
         _id
       }
     }
@@ -46,3 +46,12 @@ export const ADD_EXERCISE = gql`
     }
   }
 `;
+
+export const DELETE_EXERCISE = gql`
+  mutation DeleteExercise($id: ID!) {
+    deleteExercise(_id: $id) {
+      _id
+      exerciseName
+    }
+  }
+  `;
