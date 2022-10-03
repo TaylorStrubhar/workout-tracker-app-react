@@ -15,6 +15,7 @@ import { EditExerciseModal, AddExerciseModal } from '../components/exerciseModal
 import { useQuery } from '@apollo/client';
 
 import { QUERY_ME } from '../utils/queries';
+import DeleteExerciseModal from '../components/exerciseModals/DeleteExercise';
 
 function generateExercises(exercises) {
   if (!exercises) {
@@ -28,9 +29,7 @@ function generateExercises(exercises) {
         secondary={`${exercise.exerciseCategory}`}
       />
       <EditExerciseModal exercise={exercise} />
-      <IconButton edge="end" aria-label="delete">
-        <DeleteIcon />
-      </IconButton>
+      <DeleteExerciseModal exercise={exercise} />
     </ListItem>
   ));
 }

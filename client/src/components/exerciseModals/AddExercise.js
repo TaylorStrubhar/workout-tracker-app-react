@@ -108,8 +108,9 @@ function AddExerciseModal() {
         variables: { ...formState },
       });
 
+      setFormState({ exerciseName: '', exerciseCategory: '' });
       handleClose();
-      return console.log(`Added ${data.exerciseName}`);
+      return console.log(`Added ${exerciseName}`, data);
     } catch (e) {
       console.error(e);
     }
@@ -122,8 +123,8 @@ function AddExerciseModal() {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="Add Exercise Modal"
+        aria-describedby="Fill out form to add new exercise to your saved exercises"
       >
         <Box sx={style}>
           {/* Top Nav and Input */}
@@ -163,7 +164,6 @@ function AddExerciseModal() {
                 ))}
               </Select>
             </FormControl>
-            {error && <div>Signup failed</div>}
           </Box>
         </Box>
       </Modal>
