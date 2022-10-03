@@ -60,11 +60,11 @@ function Exercises() {
         <AddExerciseModal />
       </Stack>
       {/* Search field (non-functional yet) */}
-      <TextField fullWidth id="fullWidth" placeholder="Search" />
+      {/* <TextField fullWidth id="fullWidth" placeholder="Search" /> */}
       {/* Filter button (non-functional yet) */}
-      <Button fullWidth varient="outlined">
+      {/* <Button fullWidth varient="outlined">
         Filter by Category
-      </Button>
+      </Button> */}
 
       {/* Create list with exercises */}
       <List>{generateExercises(exercises)}</List>
