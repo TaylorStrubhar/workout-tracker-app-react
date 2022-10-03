@@ -6,31 +6,25 @@ import Auth from '../utils/auth';
 import { Box } from '@mui/system';
 import { FormControl, TextField, Button } from '@mui/material';
 
-const Login = props => {
+const Login = () => {
   // Email and Password state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  // Form state
-  const [formState, setFormState] = useState({ email: email, password: password });
+  const [formState, setFormState] = useState({
+    email: '',
+    password: '',
+  });
 
   // Set formState when email or password is entered
-  React.useEffect(() => {
-    setFormState({
-      email: email,
-      password: password,
-    });
-  }, [email, password]);
 
   const [login, { error }] = useMutation(LOGIN_USER);
 
   // update state based on form input changes
-  const handlePasswordInput = event => {
-    setPassword(event.target.value);
-  };
+  const handleChange = event => {
+    const { name, value } = event.target;
 
-  const handleEmailInput = event => {
-    setEmail(event.target.value);
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
   };
 
   // submit form
@@ -59,13 +53,13 @@ const Login = props => {
     <Box>
       <h2>Login</h2>
       <FormControl>
-        <TextField id="emailInput" placeholder="Email" value={email} onChange={handleEmailInput} />
+        <TextField id="emailInput" name="email" placeholder="Email" onChange={handleChange} />
         <TextField
           id="passwordInput"
+          name="password"
           type={'password'}
           placeholder="Password"
-          value={password}
-          onChange={handlePasswordInput}
+          onChange={handleChange}
         />
         <Button onClick={handleFormSubmit}>Submit</Button>
         {error ? `${error}` : ''}
