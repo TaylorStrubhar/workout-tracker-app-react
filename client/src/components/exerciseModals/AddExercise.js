@@ -11,6 +11,7 @@ import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { ADD_EXERCISE } from '../../utils/mutations';
+import { QUERY_ME } from '../../utils/queries';
 
 const style = {
   position: 'absolute',
@@ -52,27 +53,44 @@ const bodyCategories = [
 
 // Add Exercise Modal
 function AddExerciseModal() {
+  // Open and close modal state and functions
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // Categories and Name states for form
   const [category, setCategory] = useState('');
   const [exerciseName, setExerciseName] = useState('');
 
+  // Setting form data into object to be sent to server on submit
   const [formState, setFormState] = useState({
     exerciseName: exerciseName,
     exerciseCategory: category,
   });
 
+  // Save category choosen
   const handleSaveCategory = event => {
     setCategory(event.target.value);
   };
 
+  // Save name choosen
   const handleSaveExerciseName = event => {
     setExerciseName(event.target.value);
   };
 
-  const [addExercise, { error }] = useMutation(ADD_EXERCISE);
+  const [addExercise, { error }] = useMutation(ADD_EXERCISE, {
+    update(cache, { data: { addExercise } }) {
+      try {
+        const { me } = cache.readQuery({ query: QUERY_ME });
+        cache.writeQuery({
+          query: QUERY_ME,
+          data: { me: { ...me, exercises: [...me.exercises, addExercise] } },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  });
 
   React.useEffect(() => {
     setFormState({

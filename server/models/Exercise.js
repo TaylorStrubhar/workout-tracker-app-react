@@ -12,8 +12,9 @@ const exerciseSchema = new Schema({
     required: 'You need to assign a category to your exercise!',
     minlength: 1,
     maxlength: 50,
-  }
+  },
 });
 
-const Exercise = model('Exercise', exerciseSchema)
+const Exercise = model('Exercise', exerciseSchema);
+
 module.exports = Exercise;

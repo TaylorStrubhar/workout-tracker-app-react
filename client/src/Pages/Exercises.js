@@ -22,7 +22,7 @@ function generateExercises(exercises) {
   }
 
   return exercises.map(exercise => (
-    <ListItem key={exercise._id}>
+    <ListItem key={exercise._id} id={exercise._id}>
       <ListItemText
         primary={`${exercise.exerciseName}`}
         secondary={`${exercise.exerciseCategory}`}
@@ -35,30 +35,39 @@ function generateExercises(exercises) {
   ));
 }
 
+// Generate page
 function Exercises() {
+  // Find user data
   const { loading, data } = useQuery(QUERY_ME);
 
   // const [removeExercise] = useMutation(DELETE_EXERCISE);
 
+  // Save data, if any, in userData
   const userData = data?.me || {};
 
+  // While still loading, display Loading header
   if (loading) {
     return <h2>LOADING...</h2>;
   }
 
+  // Pull exercises from userData and set to exercises array
   let exercises = userData.exercises;
 
   return (
     <section>
+      {/* Header with addExerciseModal */}
       <Stack spacing={2} direction={'row'} sx={{ alignItems: 'center' }}>
         <h1>My Exercises</h1>
         <AddExerciseModal />
       </Stack>
+      {/* Search field (non-functional yet) */}
       <TextField fullWidth id="fullWidth" placeholder="Search" />
+      {/* Filter button (non-functional yet) */}
       <Button fullWidth varient="outlined">
         Filter by Category
       </Button>
 
+      {/* Create list with exercises */}
       <List>{generateExercises(exercises)}</List>
     </section>
   );
