@@ -24,6 +24,8 @@ import LogoutIcon from '@mui/icons-material/Logout'; // logout
 import JoinInnerIcon from '@mui/icons-material/JoinInner'; //sign up
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Profile
 
+import Auth from './utils/auth';
+
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
