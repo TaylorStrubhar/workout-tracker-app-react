@@ -24,27 +24,27 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_ROUTINE = gql`
-  mutation addRoutine($routineName: String!) {
-    addRoutine(routineName: $routineName) {
+mutation AddRoutine($routineName: String!, $exercises: [String]) {
+  addRoutine(routineName: $routineName, exercises: $exercises) {
+    _id
+    routineName
+    createdAt
+    userId
+    exercises {
       _id
-      routineName
-      createdAt
-      username
-      exercises {
-        _id
-      }
     }
   }
+}
 `;
 
 export const ADD_EXERCISE = gql`
-  mutation AddExercise($exerciseName: String!, $exerciseCategory: String!) {
-    addExercise(exerciseName: $exerciseName, exerciseCategory: $exerciseCategory) {
-      _id
-      exerciseName
-      exerciseCategory
-    }
+mutation AddExercise($input: ExerciseInput) {
+  addExercise(input: $input) {
+    _id
+    exerciseName
+    exerciseCategory
   }
+}
 `;
 
 export const DELETE_EXERCISE = gql`
@@ -53,4 +53,14 @@ export const DELETE_EXERCISE = gql`
       _id
     }
   }
+`;
+
+export const UPDATE_EXERCISE = gql`
+mutation Mutation($updateExerciseId: ID!, $input: ExerciseInput) {
+  updateExercise(id: $updateExerciseId, input: $input) {
+    _id
+    exerciseName
+    exerciseCategory
+  }
+}
 `;

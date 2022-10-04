@@ -39,7 +39,10 @@ const resolvers = {
     },
     exercise: async (parent, {_id}) => {
       return Exercise.findOne({_id});
-    }
+    },
+    exercises: async (parent, {_id}) => {
+      return Exercise.find().select('-__v');
+    },
 },
 
   Mutation: {
@@ -99,13 +102,13 @@ const resolvers = {
       console.log(findAll);
       if (context.user) {
         
-        const routine = await Routine.create({routineName: args.routineName, userId: context.user._id, exercises: findAll});
-
-        await User.findByIdAndUpdate(
-          {_id: context.user._id},
-          {$push: {routines: routine}},
-          {new: true}
-        );
+        const routine = await Routine.create({routineName: args.routineName, userId: context.user._id, exercises: exerciseArr});
+        console.log(routine);
+        // await User.findByIdAndUpdate(
+        //   {_id: context.user._id},
+        //   {$push: {routines: routine}},
+        //   {new: true}
+        // );
 
         return routine;
       }
@@ -115,7 +118,8 @@ const resolvers = {
     addExercise: async (parent, args, context) => {
       console.log({ ...args });
       if (context.user) {
-        const exercise = await Exercise.create({ ...args });
+        const exerciseInputs = args.input;
+        const exercise = await Exercise.create({ ...exerciseInputs });
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
@@ -133,6 +137,21 @@ const resolvers = {
         const exercise = await Exercise.deleteOne({ ...args });
 
         await Exercise.findByIdAndDelete(args.id);
+
+        return exercise;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    updateExercise: async (parent, args, context) => {
+      if (context.user) {
+        console.log(args);
+        const updateInputs = args.input
+        const exerciseId = args.id;
+        console.log(exerciseId)
+        const exercise = await Exercise.findByIdAndUpdate(exerciseId, { ...updateInputs });
+        // console.log(exercise)
+        // await Exercise.findByIdAndUpdate(args.id);
 
         return exercise;
       }

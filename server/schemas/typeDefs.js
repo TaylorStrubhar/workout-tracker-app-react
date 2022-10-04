@@ -39,9 +39,11 @@ const typeDefs = gql`
     me: User
     users: [User]
     user(username: String!): User
-    routines(username: String): [Routine]
+    routines(_id: ID): Routine
     routine(_id: ID!): Routine
     exercise(_id: ID!): Exercise
+    loadRoutine(_id: ID!): Routine
+    exercises: [Exercise]
   }
 
   type Mutation {
@@ -53,5 +55,5 @@ const typeDefs = gql`
     deleteExercise(_id: ID!): Exercise
     }
 `;
-
+// type Query { loadRoutine(_id: ID!): User }
 module.exports = typeDefs;

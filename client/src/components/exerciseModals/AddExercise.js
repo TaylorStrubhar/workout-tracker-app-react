@@ -105,7 +105,7 @@ function AddExerciseModal() {
 
     try {
       const { data } = await addExercise({
-        variables: { ...formState },
+        variables: { input: {...formState} },
       });
 
       setFormState({ exerciseName: '', exerciseCategory: '' });
