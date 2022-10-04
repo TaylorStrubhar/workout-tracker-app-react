@@ -18,12 +18,10 @@ const routineSchema = new Schema(
         type: String,
         required: true
       },
-      exercises: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Exercise"
-        }
-      ]
+      exercises: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Exercise'
+      }]
     },
     {
       toJSON: {
