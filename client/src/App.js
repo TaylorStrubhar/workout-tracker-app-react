@@ -195,7 +195,9 @@ function App(req) {
         {Auth.loggedIn() ? <Divider /> : ''}
         <List>
           {['Routines', 'Exercises'].map((text, index) => (
-            <ListItem>
+            <ListItem 
+            disablePadding
+            sx={Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
