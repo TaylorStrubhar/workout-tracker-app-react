@@ -28,9 +28,8 @@ const resolvers = {
         .populate('exercises');
     },
     // needs more work
-    routines: async (parent, args, context) => {
-      const params = context.user._id;
-      return Routine.find({params}).sort({createdAt: -1})
+    routines: async (parent, {_id}) => {
+      return Routine.find().sort({createdAt: -1})
       .populate('exercises');
     },
     routine: async (parent, {_id}) => {
@@ -104,11 +103,11 @@ const resolvers = {
         
         const routine = await Routine.create({routineName: args.routineName, userId: context.user._id, exercises: exerciseArr});
         console.log(routine);
-        // await User.findByIdAndUpdate(
-        //   {_id: context.user._id},
-        //   {$push: {routines: routine}},
-        //   {new: true}
-        // );
+        await User.findByIdAndUpdate(
+          {_id: context.user._id},
+          {$push: {routines: routine}},
+          {new: true}
+        );
 
         return routine;
       }

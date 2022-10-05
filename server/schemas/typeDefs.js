@@ -38,7 +38,7 @@ const typeDefs = gql`
   type Query {
     me: User
     users: [User]
-    user(username: String!): User
+    user(_id: ID!): User
     routines(_id: ID): Routine
     routine(_id: ID!): Routine
     exercise(_id: ID!): Exercise
@@ -55,5 +55,5 @@ const typeDefs = gql`
     deleteExercise(_id: ID!): Exercise
     }
 `;
-// type Query { loadRoutine(_id: ID!): User }
+
 module.exports = typeDefs;
