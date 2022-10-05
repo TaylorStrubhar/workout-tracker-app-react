@@ -17,17 +17,16 @@ query Query {
 `;
 
 export const QUERY_ROUTINE = gql`
-  query routine($id: ID!) {
-    routine(_id: $id) {
+query Query($id: ID!) {
+  routine(_id: $id) {
+    _id
+    routineName
+    userId
+    exercises {
       _id
-      routineName
-      createdAt
-      username
-      exercises {
-        _id
-      }
     }
   }
+}
 `;
 
 // export const QUERY_USER = gql`
@@ -46,30 +45,32 @@ export const QUERY_ROUTINE = gql`
 // `;
 
 export const QUERY_ME = gql`
-  query QueryMe {
-    me {
+query Query {
+  me {
+    _id
+    username
+    email
+    routines {
       _id
-      username
-      email
-      routineCount
-      exercises {
-        _id
-        exerciseName
-        exerciseCategory
-      }
+      routineName
+      createdAt
+      userId
+    }
+    exercises {
+      _id
     }
   }
+}
 `;
 
 export const QUERY_ME_BASIC = gql`
-  query QueryMe {
-    me {
-      _id
-      username
-      email
-      
-    }
+query Query {
+  me {
+    _id
+    username
+    email
   }
+}
 `;
 
 export const QUERY_EXERCISE = gql`
