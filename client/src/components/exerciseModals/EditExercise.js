@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
-import Box from '@mui/material/Box';
 
+import { useMutation } from '@apollo/client';
+
+import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +12,9 @@ import Button from '@mui/material/Button';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 
 import { Stack } from '@mui/system';
+
+import { UPDATE_EXERCISE } from '../../utils/mutations';
+import { QUERY_ME } from '../../utils/queries';
 
 const style = {
   position: 'absolute',
@@ -50,14 +55,79 @@ const bodyCategories = [
 ];
 
 function EditExerciseModal({ exercise }) {
+  // Open state of modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [category, setCategory] = React.useState(exercise.exerciseCategory);
+  // Form state, holds exercise information
+  const [formState, setFormState] = useState({
+    exerciseName: exercise.exerciseName,
+    exerciseCategory: exercise.exerciseCategory,
+  });
 
-  const handleChangeCategory = event => {
-    setCategory(event.target.value);
+  // Set formState with updated values
+  const handleChange = event => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  // UpdateExercise mutation
+  const [updateExercise, { error }] = useMutation(UPDATE_EXERCISE, {
+    update(cache, { data }) {
+      try {
+        // Rewrite cache with updated exercise
+        const { me } = cache.readQuery({ query: QUERY_ME });
+
+        // Cached exercises
+        let userExercises = me.exercises;
+
+        // Exercise to update
+        let updateExercise = data.updateExercise;
+
+        // Map function to find exercise in cache and swap
+        const updatedExerciseArray = userExercises.map(exercise => {
+          // Find exercise to update
+          if (exercise._id === updateExercise._id) {
+            // Replace with new data passed in from form state
+            return { __typename: 'Exercise', id: exercise._id, ...formState };
+          }
+
+          return exercise;
+        });
+
+        cache.writeQuery({
+          query: QUERY_ME,
+          data: {
+            me: {
+              ...me,
+              exercises: updatedExerciseArray,
+            },
+          },
+        });
+      } catch (e) {
+        console.error(error);
+      }
+    },
+  });
+
+  const handleFormSubmit = async event => {
+    event.preventDefault();
+
+    try {
+      const { data } = await updateExercise({
+        variables: { updateExerciseId: exercise._id, input: { ...formState } },
+      });
+      handleClose();
+
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -74,38 +144,47 @@ function EditExerciseModal({ exercise }) {
       >
         <Box sx={style}>
           {/* Top Nav and Input */}
-          <Stack sx={headerStyle} direction={'row'} spacing={3}>
-            {/* Close button */}
-            <IconButton edge="start" aria-label="close" onClick={handleClose}>
-              <HighlightOffIcon />
-            </IconButton>
+          <FormControl>
+            <Stack sx={headerStyle} direction={'row'} spacing={3}>
+              {/* Close button */}
+              <IconButton edge="start" aria-label="close" onClick={handleClose}>
+                <HighlightOffIcon />
+              </IconButton>
 
-            {/* Modal Title/Input */}
-            <TextField defaultValue={exercise.exerciseName} variant="standard" />
-            {/* Save Button */}
-            <Button varient="outlined" edge="end" sx={{ p: 0 }}>
-              Save
-            </Button>
-          </Stack>
+              {/* Modal Title/Input */}
+              <TextField
+                id="exerciseNameInput"
+                name="exerciseName"
+                defaultValue={exercise.exerciseName}
+                variant="standard"
+                onChange={handleChange}
+              />
+              {/* Save Button */}
+              <Button onClick={handleFormSubmit} varient="outlined" edge="end" sx={{ p: 0 }}>
+                Save
+              </Button>
+            </Stack>
 
-          {/* Select Body Part Focus Form */}
-          <Box sx={formStyle}>
-            <h4>Body Part</h4>
-            <FormControl fullWidth>
-              <Select
-                labelId="focus-label"
-                id="focus"
-                value={category}
-                onChange={handleChangeCategory}
-              >
-                {bodyCategories.map(category => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+            {/* Select Body Part Focus Form */}
+            <Box sx={formStyle}>
+              <h4>Body Part</h4>
+              <FormControl fullWidth>
+                <Select
+                  id="exerciseCategoryInput"
+                  name="exerciseCategory"
+                  defaultValue={exercise.exerciseCategory}
+                  variant="standard"
+                  onChange={handleChange}
+                >
+                  {bodyCategories.map(category => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </FormControl>
         </Box>
       </Modal>
     </div>

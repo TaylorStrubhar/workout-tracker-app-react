@@ -51,6 +51,7 @@ function Exercises() {
 
   // Pull exercises from userData and set to exercises array
   let exercises = userData.exercises;
+  console.log(exercises);
 
   return (
     <section>
