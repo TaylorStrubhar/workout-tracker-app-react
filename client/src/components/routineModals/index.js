@@ -117,7 +117,7 @@ function AddRoutineModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>+ Exercise</Button>
+      <Button onClick={handleOpen}>+ Routine</Button>
 
       <Modal
         open={open}
