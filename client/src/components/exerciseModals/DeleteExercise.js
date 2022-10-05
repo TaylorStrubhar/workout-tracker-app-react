@@ -46,7 +46,7 @@ function DeleteExerciseModal({ exercise }) {
           data: { me: { ...me, exercises: [...me.exercises, deleteExercise] } },
         });
       } catch (e) {
-        console.error(e);
+        console.error(error);
       }
     },
   });

@@ -1,14 +1,10 @@
 import React from 'react';
 
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { TextField } from '@mui/material';
+
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 import { EditExerciseModal, AddExerciseModal } from '../components/exerciseModals';
 
@@ -60,11 +56,11 @@ function Exercises() {
         <AddExerciseModal />
       </Stack>
       {/* Search field (non-functional yet) */}
-      <TextField fullWidth id="fullWidth" placeholder="Search" />
+      {/* <TextField fullWidth id="fullWidth" placeholder="Search" /> */}
       {/* Filter button (non-functional yet) */}
-      <Button fullWidth varient="outlined">
+      {/* <Button fullWidth varient="outlined">
         Filter by Category
-      </Button>
+      </Button> */}
 
       {/* Create list with exercises */}
       <List>{generateExercises(exercises)}</List>

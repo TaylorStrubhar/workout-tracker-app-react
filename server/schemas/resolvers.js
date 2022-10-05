@@ -1,14 +1,14 @@
 const { ContextualizedQueryLatencyStats } = require('apollo-reporting-protobuf');
-const {AuthenticationError} = require('apollo-server-express');
-const {User, Routine, Exercise} = require('../models');
-const {signToken} = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
+const { User, Routine, Exercise } = require('../models');
+const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-//        const userData = await User.findOne({_id: context.user._id})
-          const userData = await User.findById({_id: context.user._id})
+        //        const userData = await User.findOne({_id: context.user._id})
+        const userData = await User.findById({ _id: context.user._id })
           .select('-__v -password')
           .populate('routines')
           .populate('exercises');
@@ -28,21 +28,19 @@ const resolvers = {
         .populate('exercises');
     },
     // needs more work
-    routines: async (parent, {_id}) => {
-      return Routine.find().sort({createdAt: -1})
-      .populate('exercises');
+    routines: async (parent, { _id }) => {
+      return Routine.find().sort({ createdAt: -1 }).populate('exercises');
     },
-    routine: async (parent, {_id}) => {
-      return Routine.findOne({_id})
-      .populate('exercises');
+    routine: async (parent, { _id }) => {
+      return Routine.findOne({ _id }).populate('exercises');
     },
-    exercise: async (parent, {_id}) => {
-      return Exercise.findOne({_id});
+    exercise: async (parent, { _id }) => {
+      return Exercise.findOne({ _id });
     },
-    exercises: async (parent, {_id}) => {
+    exercises: async (parent, { _id }) => {
       return Exercise.find().select('-__v');
     },
-},
+  },
 
   Mutation: {
     login: async (parent, { email, password }) => {
@@ -100,13 +98,16 @@ const resolvers = {
       //.select('-__v');
       console.log(findAll);
       if (context.user) {
-        
-        const routine = await Routine.create({routineName: args.routineName, userId: context.user._id, exercises: exerciseArr});
+        const routine = await Routine.create({
+          routineName: args.routineName,
+          userId: context.user._id,
+          exercises: exerciseArr,
+        });
         console.log(routine);
         await User.findByIdAndUpdate(
-          {_id: context.user._id},
-          {$push: {routines: routine}},
-          {new: true}
+          { _id: context.user._id },
+          { $push: { routines: routine } },
+          { new: true }
         );
 
         return routine;
@@ -145,9 +146,9 @@ const resolvers = {
     updateExercise: async (parent, args, context) => {
       if (context.user) {
         console.log(args);
-        const updateInputs = args.input
+        const updateInputs = args.input;
         const exerciseId = args.id;
-        console.log(exerciseId)
+        console.log(exerciseId);
         const exercise = await Exercise.findByIdAndUpdate(exerciseId, { ...updateInputs });
         // console.log(exercise)
         // await Exercise.findByIdAndUpdate(args.id);
