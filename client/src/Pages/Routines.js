@@ -21,7 +21,7 @@ function generateRoutines(routines) {
     <ListItem key={routine._id} id={routine._id}>
       <ListItemText
         primary={`${routine.routineName}`}
-        secondary={`${routine.exercises}`}
+        // secondary={`${routine.exercises}`}
       />
       {/* <EditExerciseModal exercise={exercise} />
       <DeleteExerciseModal exercise={exercise} /> */}

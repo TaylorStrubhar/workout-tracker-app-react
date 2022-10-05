@@ -24,16 +24,25 @@ mutation Mutation($username: String!, $email: String!, $password: String!) {
 }
 `;
 
+// export const ADD_ROUTINE = gql`
+// mutation Mutation($routineName: String!, $exercises: [String]!) {
+//   addRoutine(routineName: $routineName, exercises: $exercises) {
+//     _id
+//     routineName
+//     createdAt
+//     userId
+//     exercises {
+//       _id
+//     }
+//   }
+// }
+// `;
+
 export const ADD_ROUTINE = gql`
 mutation Mutation($routineName: String!, $exercises: [String]!) {
-  addRoutine(routineName: $routineName, exercises: $exercises) {
+  addRoutine(routineName: $routineName) {
     _id
     routineName
-    createdAt
-    userId
-    exercises {
-      _id
-    }
   }
 }
 `;
