@@ -23,6 +23,7 @@ import LoginIcon from '@mui/icons-material/Login'; // login
 import LogoutIcon from '@mui/icons-material/Logout'; // logout
 import JoinInnerIcon from '@mui/icons-material/JoinInner'; //sign up
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Profile
+import Auth from './utils/auth';
 
 import {
   ApolloProvider,
@@ -39,6 +40,8 @@ import { setContext } from '@apollo/client/link/context';
 import Profile from './Pages/Profile';
 import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
+import Login from './Pages/Login';
+import Signup from './Pages/Signup';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -128,7 +131,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 // end
 
-function App() {
+function App(req) {
   //start
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -140,16 +143,7 @@ function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  // const linkProfile = () => {
-  //   return <Route path='/profile' element={<Profile />} />;
-  // };
-  // const linkRoutine = () => {
-  //   return <Route path='/routines' element={<Routines />} />;
-  // };
-  // const linkExercise = () => {
-  //   return <Route path='/exercises' element={<Exercises />} />;
-  // };
-  //end
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -184,24 +178,24 @@ function App() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Profile'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => (window.location = `/${text}`)}>
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  onClick={() => (window.location = `/${text}`)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem
+            disablePadding
+            sx={Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton onClick={() => (window.location = `/profile`)}>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Profile'
+                onClick={() => (window.location = `/profile`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
-        <Divider />
+        {Auth.loggedIn() ? <Divider /> : ''}
         <List>
           {['Routines', 'Exercises'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -232,65 +226,97 @@ function App() {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {Auth.loggedIn() ? <Divider /> : ''}
         <List>
-          {['Login', 'Logout'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+          <ListItem
+            disablePadding
+            sx={!Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => (window.location = `/login`)}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
                 }}
-                onClick={() => (window.location = `/${text}`)}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <LoginIcon /> : <LogoutIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                  onClick={() => (window.location = `/${text}`)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Login'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/login`)}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List>
+          <ListItem
+            disablePadding
+            sx={Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => Auth.logout()}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}
+              >
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Logout'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
         <List>
-          {['Signup'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+          <ListItem
+            disablePadding
+            sx={!Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => (window.location = `/signup`)}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
                 }}
-                onClick={() => (window.location = `/${text}`)}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <JoinInnerIcon /> : <JoinInnerIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                  onClick={() => (window.location = `/${text}`)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                <JoinInnerIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Sign-up'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/signup`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
@@ -298,6 +324,8 @@ function App() {
         <ApolloProvider client={client}>
           <Router>
             <Routes>
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/exercises' element={<Exercises />} />
               <Route path='/routines' element={<Routines />} />

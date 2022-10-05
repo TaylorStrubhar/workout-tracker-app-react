@@ -5,24 +5,28 @@ const typeDefs = gql`
     _id: ID
     username: String
     email: String
-    workoutCount: Int
-    workouts: [Routine]
+    routineCount: Int
+    routines: [Routine]
+    exercises: [Exercise]
   }
 
   type Routine {
     _id: ID
-    routineName: String
+    routineName: String!
     createdAt: String
-    username: String
+    userId: String
     exercises: [Exercise]
+  }
+
+  input ExerciseInput {
+    exerciseName: String
+    exerciseCategory: String
   }
 
   type Exercise {
     _id: ID
     exerciseName: String
-    weight: Int
-    reps: Int
-    category: String
+    exerciseCategory: String
   }
 
   type Auth {
@@ -30,19 +34,26 @@ const typeDefs = gql`
     user: User
   }
 
+ 
   type Query {
     me: User
     users: [User]
-    user(username: String!): User
-    routines(username: String): [Routine]
+    user(_id: ID!): User
+    routines(_id: ID): Routine
     routine(_id: ID!): Routine
+    exercise(_id: ID!): Exercise
+    loadRoutine(_id: ID!): Routine
+    exercises: [Exercise]
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addRoutine(name: String!): Routine
-  }
+    addRoutine(routineName: String!, exercises: [String]): Routine
+    addExercise(input: ExerciseInput): Exercise
+    updateExercise(id: ID!, input: ExerciseInput): Exercise
+    deleteExercise(_id: ID!): Exercise
+    }
 `;
 
 module.exports = typeDefs;
