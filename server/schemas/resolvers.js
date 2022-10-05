@@ -7,7 +7,8 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
+        //        const userData = await User.findOne({_id: context.user._id})
+        const userData = await User.findById({ _id: context.user._id })
           .select('-__v -password')
           .populate('routines')
           .populate('exercises');
@@ -26,20 +27,18 @@ const resolvers = {
         .populate('routines')
         .populate('exercises');
     },
-    routines: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Routine.find(params).sort({ createdAt: -1 });
-    },
     // needs more work
-    routines: async (parent, args, context) => {
-      const params = context.user._id;
-      return Routine.find({ params }).sort({ createdAt: -1 }).populate('exercises');
+    routines: async (parent, { _id }) => {
+      return Routine.find().sort({ createdAt: -1 }).populate('exercises');
     },
     routine: async (parent, { _id }) => {
       return Routine.findOne({ _id }).populate('exercises');
     },
     exercise: async (parent, { _id }) => {
       return Exercise.findOne({ _id });
+    },
+    exercises: async (parent, { _id }) => {
+      return Exercise.find().select('-__v');
     },
   },
 
@@ -102,9 +101,9 @@ const resolvers = {
         const routine = await Routine.create({
           routineName: args.routineName,
           userId: context.user._id,
-          exercises: findAll,
+          exercises: exerciseArr,
         });
-
+        console.log(routine);
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { routines: routine } },
@@ -119,7 +118,8 @@ const resolvers = {
     addExercise: async (parent, args, context) => {
       console.log({ ...args });
       if (context.user) {
-        const exercise = await Exercise.create({ ...args });
+        const exerciseInputs = args.input;
+        const exercise = await Exercise.create({ ...exerciseInputs });
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
@@ -137,6 +137,21 @@ const resolvers = {
         const exercise = await Exercise.deleteOne({ ...args });
 
         await Exercise.findByIdAndDelete(args.id);
+
+        return exercise;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    updateExercise: async (parent, args, context) => {
+      if (context.user) {
+        console.log(args);
+        const updateInputs = args.input;
+        const exerciseId = args.id;
+        console.log(exerciseId);
+        const exercise = await Exercise.findByIdAndUpdate(exerciseId, { ...updateInputs });
+        // console.log(exercise)
+        // await Exercise.findByIdAndUpdate(args.id);
 
         return exercise;
       }

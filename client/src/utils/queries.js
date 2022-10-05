@@ -1,17 +1,19 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_ROUTINES = gql`
-  query routines($username: String) {
-    routines(username: $username) {
+query Query {
+  me {
+    routines {
       _id
       routineName
       createdAt
-      username
+      userId
       exercises {
         _id
       }
     }
   }
+}
 `;
 
 export const QUERY_ROUTINE = gql`
@@ -68,4 +70,24 @@ export const QUERY_ME_BASIC = gql`
       
     }
   }
+`;
+
+export const QUERY_EXERCISE = gql`
+query Exercise($id: ID!) {
+  exercise(_id: $id) {
+    _id
+    exerciseName
+    exerciseCategory
+  }
+}
+`;
+
+export const QUERY_EXERCISES = gql`
+query Query {
+  exercises {
+    _id
+    exerciseName
+    exerciseCategory
+  }
+}
 `;

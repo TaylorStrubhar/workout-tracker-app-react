@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
+import { Box } from '@mui/system';
+import { FormControl, TextField, Button } from '@mui/material';
 
 import Auth from '../utils/auth';
 
@@ -13,7 +15,7 @@ const Signup = () => {
   const [addUser, { error }] = useMutation(ADD_USER);
 
   // update state based on form input changes
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target;
 
     setFormState({
@@ -23,7 +25,7 @@ const Signup = () => {
   };
 
   // submit form
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = async event => {
     event.preventDefault();
 
     try {
@@ -38,49 +40,27 @@ const Signup = () => {
   };
 
   return (
-    <main className="flex-row justify-center mb-4">
-      <div className="col-12 col-md-6">
-        <div className="card">
-          <h4 className="card-header">Sign Up</h4>
-          <div className="card-body">
-            <form onSubmit={handleFormSubmit}>
-              <input
-                className="form-input"
-                placeholder="Your username"
-                name="username"
-                type="username"
-                id="username"
-                value={formState.username}
-                onChange={handleChange}
-              />
-              <input
-                className="form-input"
-                placeholder="Your email"
-                name="email"
-                type="email"
-                id="email"
-                value={formState.email}
-                onChange={handleChange}
-              />
-              <input
-                className="form-input"
-                placeholder="******"
-                name="password"
-                type="password"
-                id="password"
-                value={formState.password}
-                onChange={handleChange}
-              />
-              <button className="btn d-block w-100" type="submit">
-                Submit
-              </button>
-            </form>
-
-            {error && <div>Signup failed</div>}
-          </div>
-        </div>
-      </div>
-    </main>
+    <Box>
+      <h2>Signup</h2>
+      <FormControl>
+        <TextField
+          id="usernameInput"
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+        />
+        <TextField id="emailInput" name="email" placeholder="Email" onChange={handleChange} />
+        <TextField
+          id="passwordInput"
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+        />
+        <Button onClick={handleFormSubmit}>Submit</Button>
+        {error ? `${error}` : ''}
+      </FormControl>
+    </Box>
   );
 };
 
