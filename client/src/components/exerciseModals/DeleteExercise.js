@@ -59,6 +59,7 @@ function DeleteExerciseModal({ exercise }) {
       const { data } = await deleteExercise({
         variables: { id: exerciseId },
       });
+
       console.log(data);
 
       handleClose();
