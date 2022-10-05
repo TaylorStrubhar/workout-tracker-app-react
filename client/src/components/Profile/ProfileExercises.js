@@ -1,17 +1,17 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Link, Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 
-function generateExercises(exercises) {
-  if (!exercises) {
+function generateExercises(loadExercises) {
+  console.log(loadExercises);
+  if (!loadExercises) {
     return console.log('You have no saved exercises!');
   }
 
-  return exercises.map(exercise => (
+  return loadExercises.map(exercise => (
     <ListItem key={exercise._id} id={exercise._id} sx={{ padding: 0 }}>
       <ListItemText
         primary={`${exercise.exerciseName}`}
@@ -24,16 +24,19 @@ function generateExercises(exercises) {
 // Generate page
 function ProfileExercises({ exercises }) {
   // Pull exercises from userData and set to exercises array
-  let loadExercises = exercises.slice(0, 3);
+
+  let loadExercises = exercises.length ? exercises.slice(0, 3) : null;
+
   let totalExercises = exercises.length - 3;
 
   return (
     <section>
       {/* Create list with exercises */}
       <List sx={{ paddingTop: 0 }}>
-        {generateExercises(loadExercises)}
+        {loadExercises ? generateExercises(loadExercises) : ''}
+
         {totalExercises > 0 ? (
-          <Typography variant="overline">
+          <Typography variant="overline" key="id">
             <Link
               href="/exercises"
               sx={{ padding: 0, color: 'gray', textDecoration: 'underlined' }}
