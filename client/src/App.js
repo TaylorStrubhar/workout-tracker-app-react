@@ -23,10 +23,14 @@ import LoginIcon from '@mui/icons-material/Login'; // login
 import LogoutIcon from '@mui/icons-material/Logout'; // logout
 import JoinInnerIcon from '@mui/icons-material/JoinInner'; //sign up
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Profile
-
 import Auth from './utils/auth';
 
-import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from '@apollo/client';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -61,7 +65,7 @@ const client = new ApolloClient({
 //  Modal start
 const drawerWidth = 240;
 
-const openedMixin = theme => ({
+const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -70,7 +74,7 @@ const openedMixin = theme => ({
   overflowX: 'hidden',
 });
 
-const closedMixin = theme => ({
+const closedMixin = (theme) => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -92,7 +96,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
@@ -110,7 +114,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
@@ -127,10 +131,16 @@ const Drawer = styled(MuiDrawer, {
 }));
 // end
 
-function App() {
+function App(req) {
   //start
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  //
+  //
+  console.log(Auth.loggedIn());
+  //
+  //
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -139,26 +149,17 @@ function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  // const linkProfile = () => {
-  //   return <Route path='/profile' element={<Profile />} />;
-  // };
-  // const linkRoutine = () => {
-  //   return <Route path='/routines' element={<Routines />} />;
-  // };
-  // const linkExercise = () => {
-  //   return <Route path='/exercises' element={<Exercises />} />;
-  // };
-  //end
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position='fixed' open={open}>
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             sx={{
               marginRight: 5,
               ...(open && { display: 'none' }),
@@ -166,34 +167,48 @@ function App() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant='h6' noWrap component='div'>
             Workout Tracker
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant='permanent' open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {['Profile'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => (window.location = `/${text}`)}>
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} onClick={() => (window.location = `/${text}`)} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem
+            disablePadding
+            sx={Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton onClick={() => (window.location = `/profile`)}>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Profile'
+                onClick={() => (window.location = `/profile`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
-        <Divider />
+        {Auth.loggedIn() ? <Divider /> : ''}
         <List>
           {['Routines', 'Exercises'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+            <ListItem
+              key={text}
+              disablePadding
+              sx={
+                Auth.loggedIn() ? { display: 'display' } : { display: 'none' }
+              }
+            >
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -209,7 +224,11 @@ function App() {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <DirectionsRunIcon /> : <FitnessCenterIcon />}
+                  {index % 2 === 0 ? (
+                    <DirectionsRunIcon />
+                  ) : (
+                    <FitnessCenterIcon />
+                  )}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
@@ -220,77 +239,109 @@ function App() {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {Auth.loggedIn() ? <Divider /> : ''}
         <List>
-          {['Login', 'Logout'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+          <ListItem
+            disablePadding
+            sx={!Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => (window.location = `/login`)}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
                 }}
-                onClick={() => (window.location = `/${text}`)}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <LoginIcon /> : <LogoutIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                  onClick={() => (window.location = `/${text}`)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Login'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/login`)}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List>
+          <ListItem
+            disablePadding
+            sx={Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => Auth.logout()}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}
+              >
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Logout'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
         <List>
-          {['Signup'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+          <ListItem
+            disablePadding
+            sx={!Auth.loggedIn() ? { display: 'display' } : { display: 'none' }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => (window.location = `/signup`)}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
                 }}
-                onClick={() => (window.location = `/${text}`)}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <JoinInnerIcon /> : <JoinInnerIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                  onClick={() => (window.location = `/${text}`)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                <JoinInnerIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary='Sign-up'
+                sx={{ opacity: open ? 1 : 0 }}
+                onClick={() => (window.location = `/signup`)}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <ApolloProvider client={client}>
           <Router>
             <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/exercises" element={<Exercises />} />
-              <Route path="/routines" element={<Routines />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+              <Route path='/profile' element={<Profile />} />
+              <Route path='/exercises' element={<Exercises />} />
+              <Route path='/routines' element={<Routines />} />
             </Routes>
           </Router>
         </ApolloProvider>
