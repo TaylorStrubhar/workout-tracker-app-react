@@ -5,9 +5,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, Link, Typography } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-
-import { QUERY_ME } from '../../utils/queries';
 
 function generateExercises(exercises) {
   if (!exercises) {
@@ -25,27 +22,16 @@ function generateExercises(exercises) {
 }
 
 // Generate page
-function ProfileExercises() {
-  // Find user data
-  const { loading, data } = useQuery(QUERY_ME);
-
-  // Save data, if any, in userData
-  const userData = data?.me || {};
-
-  // While still loading, display Loading header
-  if (loading) {
-    return <CircularProgress />;
-  }
-
+function ProfileExercises({ exercises }) {
   // Pull exercises from userData and set to exercises array
-  let loadExercises = userData.exercises.slice(0, 3);
-  let totalExercises = userData.exercises.length - 3;
+  let loadExercises = exercises.slice(0, 3);
+  let totalExercises = exercises.length - 3;
 
   return (
     <section>
       {/* Create list with exercises */}
       <List sx={{ paddingTop: 0 }}>
-        {generateExercises(loadExercises)}{' '}
+        {generateExercises(loadExercises)}
         {totalExercises > 0 ? (
           <Typography variant="overline">
             <Link
