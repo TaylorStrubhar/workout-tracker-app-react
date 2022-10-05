@@ -6,9 +6,7 @@ import { TextField } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { CircularProgress } from '@mui/material';
 
 import { EditExerciseModal, AddExerciseModal } from '../components/exerciseModals';
 
@@ -46,7 +44,7 @@ function Exercises() {
 
   // While still loading, display Loading header
   if (loading) {
-    return <h2>LOADING...</h2>;
+    return <CircularProgress />;
   }
 
   // Pull exercises from userData and set to exercises array
