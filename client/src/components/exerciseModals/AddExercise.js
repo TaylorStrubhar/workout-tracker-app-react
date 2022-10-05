@@ -87,7 +87,7 @@ function AddExerciseModal() {
           data: { me: { ...me, exercises: [...me.exercises, addExercise] } },
         });
       } catch (e) {
-        console.error(e);
+        console.error(error);
       }
     },
   });
@@ -105,7 +105,7 @@ function AddExerciseModal() {
 
     try {
       const { data } = await addExercise({
-        variables: { input: {...formState} },
+        variables: { input: { ...formState } },
       });
 
       setFormState({ exerciseName: '', exerciseCategory: '' });
