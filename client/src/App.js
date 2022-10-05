@@ -136,12 +136,6 @@ function App(req) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  //
-  //
-  console.log(Auth.loggedIn());
-  //
-  //
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
