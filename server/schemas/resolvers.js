@@ -115,6 +115,17 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
+    deleteRoutine: async (parent, args, context) => {
+      if (context.user) {
+        const routine = await Routine.deleteOne({ ...args });
+
+        await Routine.findByIdAndDelete(args.id);
+
+        return routine;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
     addExercise: async (parent, args, context) => {
       console.log({ ...args });
       if (context.user) {

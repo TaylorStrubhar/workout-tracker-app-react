@@ -47,6 +47,14 @@ mutation Mutation($routineName: String!, $exercises: [String]!) {
 }
 `;
 
+export const DELETE_ROUTINE = gql`
+mutation Mutation($id: ID!) {
+  deleteRoutine(_id: $id) {
+    _id
+  }
+}
+`;
+
 export const ADD_EXERCISE = gql`
 mutation AddExercise($input: ExerciseInput) {
   addExercise(input: $input) {
