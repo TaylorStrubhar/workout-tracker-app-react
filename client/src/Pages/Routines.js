@@ -33,7 +33,7 @@ function Routines() {
     <section>
       <Stack spacing={2} direction={'row'} alignItems={'center'}>
         <h1>My Routines</h1>
-        <AddRoutineModal />
+        <AddRoutineModal userData={userData} />
       </Stack>
 
       <List>{generateRoutines(routines)}</List>

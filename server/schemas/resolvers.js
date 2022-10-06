@@ -88,22 +88,16 @@ const resolvers = {
     //   throw new AuthenticationError('You need to be logged in!');
     // },
     addRoutine: async (parent, args, context) => {
+      console.log(args);
       const exerciseArr = args.exercises;
-      console.log(exerciseArr);
-      const query = { _id: exerciseArr };
-      // const options = { };
-      const findAll = await Exercise.find(query);
-      // const testId = args.exercises[0];
-      // const testCall = await Exercise.findById(testId)
-      //.select('-__v');
-      console.log(findAll);
+      // console.log('ExerciseArr', exerciseArr);
       if (context.user) {
         const routine = await Routine.create({
           routineName: args.routineName,
           userId: context.user._id,
           exercises: exerciseArr,
         });
-        console.log(routine);
+        // console.log('Routine', routine);
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { routines: routine } },

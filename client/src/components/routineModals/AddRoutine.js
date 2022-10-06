@@ -7,18 +7,25 @@ import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Button from '@mui/material/Button';
-import { FormControl, MenuItem, Select, TextField } from '@mui/material';
+import {
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  ListItem,
+  ListItemText,
+  List,
+} from '@mui/material';
+
+import AddRoutineExercise from './AddExercises';
 
 import { Stack } from '@mui/system';
 import { ADD_ROUTINE } from '../../utils/mutations';
 import { QUERY_ME } from '../../utils/queries';
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
+  width: 'full',
+  height: '100%',
   bgcolor: 'background.paper',
   border: '2px solid #1A76D2',
   borderRadius: 2,
@@ -29,51 +36,39 @@ const style = {
 const headerStyle = {
   display: 'flex',
   justifyContent: 'space-between',
-  width: 'full',
-  alignItems: 'center',
+  width: '100%',
+  bgcolor: 'background.paper',
+  borderRadius: 2,
 };
 
 const formStyle = {
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'top',
   width: 'full',
-  alignItems: 'center',
+  height: '100%',
+  bgcolor: 'background.paper',
 };
 
-// const bodyCategories = [
-//   'Arms',
-//   'Back',
-//   'Cardio',
-//   'Chest',
-//   'Core',
-//   'Full Body',
-//   'Legs',
-//   'Shoulders',
-// ];
-
 // Add Routine Modal
-function AddRoutineModal() {
+function AddRoutineModal({ userData }) {
   // Open and close modal state and functions
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Categories and Name states for form
+  const userExercises = userData.exercises;
+
   const [routineName, setRoutineName] = useState('');
+  const [exercises, setExercises] = useState([]);
 
-  // Setting form data into object to be sent to server on submit
-  const [formState, setFormState] = useState({
-    routineName: routineName,
-  });
-
-  // Save category choosen
-  //   const handleSaveCategory = event => {
-  //     setCategory(event.target.value);
-  //   };
-
-  // Save name choosen
-  const handleSaveRoutineName = event => {
+  const handleSaveName = event => {
     setRoutineName(event.target.value);
+  };
+
+  const hanldeCallback = childData => {
+    setExercises(childData);
+    return exercises;
   };
 
   const [addRoutine, { error }] = useMutation(ADD_ROUTINE, {
@@ -90,28 +85,39 @@ function AddRoutineModal() {
     },
   });
 
-  React.useEffect(() => {
-    setFormState({
-      routineName: routineName,
-    });
-  }, [routineName]);
-
   // submit form
   const handleFormSubmit = async event => {
     event.preventDefault();
 
     try {
       const { data } = await addRoutine({
-        variables: { input: { ...formState } },
+        variables: { routineName: routineName, exercises: exercises },
       });
 
-      setFormState({ routineName: '' });
-      handleClose();
-      return console.log(`Added ${routineName}`, data);
+      console.info(data);
     } catch (e) {
       console.error(e);
     }
+
+    handleClose();
   };
+
+  function generateExercises(exercises) {
+    if (!exercises) {
+      return console.log('You have no saved exercises!');
+    }
+
+    return exercises.map(exercise => (
+      <ListItem key={exercise._id} id={exercise._id}>
+        <ListItemText
+          primary={`${exercise.exerciseName}`}
+          secondary={`${exercise.exerciseCategory}`}
+        />
+        {/* <EditExerciseModal exercise={exercise} />
+        <DeleteExerciseModal exercise={exercise} /> */}
+      </ListItem>
+    ));
+  }
 
   return (
     <div>
@@ -135,33 +141,16 @@ function AddRoutineModal() {
             <TextField
               placeholder="Routine Name"
               variant="standard"
-              value={routineName}
-              onChange={handleSaveRoutineName}
+              name="routineName"
+              onChange={handleSaveName}
             />
             {/* Save Button */}
             <Button varient="outlined" edge="end" sx={{ p: 0 }} onClick={handleFormSubmit}>
               Save
             </Button>
           </Stack>
-
-          {/* Select Body Part Focus Form */}
-          {/* <Box sx={formStyle}>
-            <h4>Body Part</h4>
-            <FormControl fullWidth>
-              <Select
-                labelId="focus-label"
-                id="focus"
-                value={category}
-                onChange={handleSaveCategory}
-              >
-                {bodyCategories.map(category => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box> */}
+          <AddRoutineExercise userExercises={userExercises} parentCallback={hanldeCallback} />
+          <List>{generateExercises(exercises)}</List>
         </Box>
       </Modal>
     </div>

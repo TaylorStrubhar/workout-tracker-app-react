@@ -312,7 +312,7 @@ function App(req) {
         <ApolloProvider client={client}>
           <Router>
             <Routes>
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={!Auth.loggedIn() ? <Login /> : <Profile />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/exercises" element={<Exercises />} />

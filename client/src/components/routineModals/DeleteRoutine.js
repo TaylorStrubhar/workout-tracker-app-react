@@ -29,14 +29,12 @@ const style = {
 
 // Add Exercise Modal
 function DeleteRoutineModal({ routine }) {
-  console.log(routine);
   // Open and close modal state and functions
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const routineName = routine.routineName;
-  console.log(routineName);
 
   const [deleteRoutine, { error }] = useMutation(DELETE_ROUTINE, {
     update(cache, { data: { deleteRoutine } }) {
@@ -61,8 +59,7 @@ function DeleteRoutineModal({ routine }) {
         variables: { id: routine._id },
       });
 
-      console.log(data);
-
+      console.info(data);
       handleClose();
       return console.log(`Deleted ${routineName}`);
     } catch (e) {
@@ -96,8 +93,6 @@ function DeleteRoutineModal({ routine }) {
               Cancel
             </Button>
           </Stack>
-
-          {/* Select Body Part Focus Form */}
         </Box>
       </Modal>
     </div>
