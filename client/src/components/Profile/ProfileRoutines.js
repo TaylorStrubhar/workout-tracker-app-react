@@ -3,34 +3,33 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Link, Typography } from '@mui/material';
+import RoutineCard from '../routineCard';
 
-function generateRoutines(Routines) {
-  if (!Routines) {
+function generateRoutines(loadRoutines) {
+  if (!loadRoutines) {
     return console.log('You have no saved Routines!');
   }
 
-  return Routines.map((routine) => (
-    <ListItem key={routine._id} sx={{ padding: 0 }}>
-      <ListItemText primary={`${routine.routineName}`} />
-    </ListItem>
+  return loadRoutines.map((routine) => (
+    <RoutineCard key={routine._id} routine={routine} />
   ));
 }
 
 // Generate page
-function ProfileRoutines({ Routines }) {
+function ProfileRoutines({ routines }) {
   // Pull Routines from userData and set to Routines array
-  let loadRoutines = Routines.slice(0, 3);
-  let totalRoutines = Routines.length - 3;
+  let loadRoutines = routines.length ? routines.slice(0, 3) : null;
+  let totalRoutines = routines.length - 3;
 
   return (
     <section>
       {/* Create list with Routines */}
       <List sx={{ paddingTop: 0 }}>
-        {generateRoutines(loadRoutines)}
+        {loadRoutines ? generateRoutines(loadRoutines) : ''}
         {totalRoutines > 0 ? (
-          <Typography variant='overline'>
+          <Typography variant='overline' key='id'>
             <Link
-              href='/Routines'
+              href='/routines'
               sx={{ padding: 0, color: 'gray', textDecoration: 'underlined' }}
             >{`+ ${totalRoutines} more`}</Link>
           </Typography>
