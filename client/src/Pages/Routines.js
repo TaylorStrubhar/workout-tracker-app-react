@@ -4,8 +4,7 @@ import RoutineCard from '../components/routineCard';
 import { AddRoutineModal } from '../components/routineModals';
 
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+
 import { CircularProgress } from '@mui/material';
 
 import { useQuery } from '@apollo/client';
@@ -17,16 +16,7 @@ function generateRoutines(routines) {
     return console.log('You have no saved routines!');
   }
 
-  return routines.map(routine => (
-    <ListItem key={routine._id} id={routine._id}>
-      <ListItemText
-        primary={`${routine.routineName}`}
-        // secondary={`${routine.exercises}`}
-      />
-      {/* <EditExerciseModal exercise={exercise} />
-      <DeleteExerciseModal exercise={exercise} /> */}
-    </ListItem>
-  ));
+  return routines.map(routine => <RoutineCard key={routine._id} routine={routine} />);
 }
 
 function Routines() {
@@ -45,7 +35,7 @@ function Routines() {
         <h1>My Routines</h1>
         <AddRoutineModal />
       </Stack>
-      {/* <RoutineCard {...generateRoutines(routines)} /> */}
+
       <List>{generateRoutines(routines)}</List>
     </section>
   );

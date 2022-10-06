@@ -59,19 +59,17 @@ function AddRoutineModal() {
   const handleClose = () => setOpen(false);
 
   // Categories and Name states for form
-//   const [category, setCategory] = useState('');
   const [routineName, setRoutineName] = useState('');
 
   // Setting form data into object to be sent to server on submit
   const [formState, setFormState] = useState({
     routineName: routineName,
-    // routineCategory: category,
   });
 
   // Save category choosen
-//   const handleSaveCategory = event => {
-//     setCategory(event.target.value);
-//   };
+  //   const handleSaveCategory = event => {
+  //     setCategory(event.target.value);
+  //   };
 
   // Save name choosen
   const handleSaveRoutineName = event => {
@@ -94,7 +92,7 @@ function AddRoutineModal() {
 
   React.useEffect(() => {
     setFormState({
-      routineName: routineName
+      routineName: routineName,
     });
   }, [routineName]);
 

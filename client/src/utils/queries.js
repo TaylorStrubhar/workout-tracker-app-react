@@ -24,6 +24,8 @@ export const QUERY_ROUTINE = gql`
       userId
       exercises {
         _id
+        exerciseName
+        exerciseCategory
       }
     }
   }
