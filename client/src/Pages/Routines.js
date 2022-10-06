@@ -30,7 +30,6 @@ function generateRoutines(routines) {
 }
 
 function Routines() {
-
   const { loading, data } = useQuery(QUERY_ME);
   const userData = data?.me || {};
 
