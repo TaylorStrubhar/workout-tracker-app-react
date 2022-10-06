@@ -58,6 +58,18 @@ export const DELETE_ROUTINE = gql`
   }
 `;
 
+export const UPDATE_ROUTINE = gql`
+mutation Mutation($updateRoutineId: ID!, $routineName: String!, $exercises: [String]) {
+  updateRoutine(id: $updateRoutineId, routineName: $routineName, exercises: $exercises) {
+    _id
+    routineName
+    exercises {
+      _id
+    }
+  }
+}
+`;
+
 export const ADD_EXERCISE = gql`
   mutation AddExercise($input: ExerciseInput) {
     addExercise(input: $input) {

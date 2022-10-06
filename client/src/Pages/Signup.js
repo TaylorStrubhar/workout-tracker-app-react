@@ -37,6 +37,7 @@ const Signup = () => {
     } catch (e) {
       console.error(e);
     }
+    window.location.replace('/profile');
   };
 
   return (

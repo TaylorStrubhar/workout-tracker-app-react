@@ -8,6 +8,7 @@ import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import ProfileExercises from '../components/Profile/ProfileExercises';
+import ProfileRoutines from '../components/Profile/ProfileRoutines';
 import Typography from '@mui/material/Typography';
 
 function Profile() {
@@ -22,11 +23,20 @@ function Profile() {
 
   const userExercises = userData.exercises;
 
+  const userRoutines = userData.routines;
+
   return (
     <section>
       <Typography variant="h3">{`${userData.username}`}</Typography>
       <Stack spacing={2} direction={'row'} sx={{ alignItems: 'center' }}>
-        <Typography variant="h6">My Exercises</Typography>
+        <Typography variant="h5" sx={{fontWeight: "bold"}}>My Routines</Typography>
+        <Button onClick={() => (window.location = '/routines')}>
+          See all <NavigateNextRoundedIcon />
+        </Button>
+      </Stack>
+      <ProfileRoutines routines={userRoutines} />
+      <Stack spacing={2} direction={'row'} sx={{ alignItems: 'center' }}>
+        <Typography variant="h5" sx={{fontWeight: "bold"}}>My Exercises</Typography>
         <Button onClick={() => (window.location = '/exercises')}>
           See all <NavigateNextRoundedIcon />
         </Button>

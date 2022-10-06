@@ -120,6 +120,22 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
+    updateRoutine: async (parent, args, context) => {
+      if (context.user) {
+        console.log(args);
+        const routineName = args.routineName;
+        const routineId = args.id;
+        console.log(args.exercises);
+        const exercises = args.exercises;
+        const routine = await Routine.findByIdAndUpdate(routineId, { routineName: routineName, exercises: exercises });
+        // console.log(routine)
+        // await routine.findByIdAndUpdate(args.id);
+
+        return routine;
+      }
+
+      throw new AuthenticationError('You need to be logged in!');
+    },
     addExercise: async (parent, args, context) => {
       console.log({ ...args });
       if (context.user) {
