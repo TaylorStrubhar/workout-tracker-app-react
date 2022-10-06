@@ -36,6 +36,7 @@ import Exercises from './Pages/Exercises';
 import Routines from './Pages/Routines';
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
+import Landing from './Pages/Landing';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -312,6 +313,7 @@ function App(req) {
         <ApolloProvider client={client}>
           <Router>
             <Routes>
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
