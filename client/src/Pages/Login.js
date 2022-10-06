@@ -47,6 +47,7 @@ const Login = () => {
       email: '',
       password: '',
     });
+    window.location.replace('/profile');
   };
 
   return (
