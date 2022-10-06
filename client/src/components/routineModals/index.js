@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { useState } from 'react';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
 
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Button from '@mui/material/Button';
+import { Box } from '@mui/material';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 
 import { Stack } from '@mui/system';
@@ -16,11 +15,11 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 300,
+  width: '100%',
+  height: '100%',
   bgcolor: 'background.paper',
   border: '2px solid #1A76D2',
   borderRadius: 2,
-  boxShadow: 15,
   p: 3,
 };
 
@@ -33,9 +32,24 @@ const headerStyle = {
 
 const formStyle = {
   display: 'flex',
+  flexWrap: 'wrap',
   justifyContent: 'space-between',
   width: 'full',
   alignItems: 'center',
+};
+
+const addExerciseStyle = {
+  position: 'absolute',
+  top: '25%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '90%',
+  bgcolor: 'white',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
 };
 
 const Exercises = ['Arms', 'Back', 'Cardio', 'Chest', 'Core', 'Full Body', 'Legs', 'Shoulders'];
@@ -103,21 +117,47 @@ function EditModal({ exercise }) {
   );
 }
 
+function SelectExerciseModal() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Button fullWidth onClick={handleOpen}>
+        Add Exercise
+      </Button>
+
+      <Modal open={open} onClose={handleClose}>
+        <Box style={addExerciseStyle}>
+          <Button fullWidth onClick={handleClose}>
+            Close Child Modal
+          </Button>
+        </Box>
+      </Modal>
+    </React.Fragment>
+  );
+}
+
 // Add Exercise Modal
-function AddRoutineModal() {
+function AddRoutineModal({ exercises }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [category, setCategory] = useState('');
+  // const [category, setCategory] = useState('');
 
-  const handleChangeCategory = event => {
-    setCategory(event.target.value);
-  };
+  // const handleChangeCategory = event => {
+  //   setCategory(event.target.value);
+  // };
 
   return (
     <div>
-      <Button onClick={handleOpen}>+ Exercise</Button>
+      <Button onClick={handleOpen}>+ Routine</Button>
 
       <Modal
         open={open}
@@ -134,7 +174,7 @@ function AddRoutineModal() {
             </IconButton>
 
             {/* Modal Title/Input */}
-            <TextField placeholder="Exercise Name" variant="standard" />
+            <TextField placeholder="Routine Name" variant="standard" />
             {/* Save Button */}
             <Button varient="outlined" edge="end" sx={{ p: 0 }}>
               Save
@@ -142,22 +182,8 @@ function AddRoutineModal() {
           </Stack>
 
           {/* Select Body Part Focus Form */}
-          <Box sx={formStyle}>
-            <h4>Body Part</h4>
-            <FormControl fullWidth>
-              <Select
-                labelId="focus-label"
-                id="focus"
-                value={category}
-                onChange={handleChangeCategory}
-              >
-                {Exercises.map(category => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Box>
+            <SelectExerciseModal />
           </Box>
         </Box>
       </Modal>
