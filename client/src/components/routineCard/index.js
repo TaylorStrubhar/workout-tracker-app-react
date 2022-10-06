@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { ListItem, ListItemText, Typography } from '@mui/material';
-import DeleteRoutineModal from '../routineModals/DeleteRoutine';
+import { DeleteRoutineModal } from '../routineModals';
 
 import { QUERY_ROUTINE } from '../../utils/queries';
 
