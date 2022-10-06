@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { ListItem, ListItemText, Typography } from '@mui/material';
+import DeleteRoutineModal from '../routineModals/DeleteRoutine';
 
 import { QUERY_ROUTINE } from '../../utils/queries';
 
@@ -38,8 +39,9 @@ function card({ routine }) {
   return (
     <React.Fragment>
       <CardContent>
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
           {routine.routineName}
+          <DeleteRoutineModal routine={routine} />
         </Typography>
 
         {displayExercisesArr.map(exercise => (
